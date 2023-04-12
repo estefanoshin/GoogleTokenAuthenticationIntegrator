@@ -1,6 +1,5 @@
 package com.google.GoogleTokenAuthenticationIntegrator.controller;
 
-import com.google.GoogleTokenAuthenticationIntegrator.repository.Generator;
 import com.google.GoogleTokenAuthenticationIntegrator.service.impl.GeneratorService;
 import com.google.zxing.WriterException;
 import org.springframework.beans.factory.annotation.Autowired;
