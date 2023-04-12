@@ -40,6 +40,10 @@ public class AuthenticatorController {
         generatorService.createQRCode(code, response, 400, 400);
     }
 
+    /**
+     * TODO: Agregar validaciones para el username en las aplicaciones finales
+     * Validate the username for a more sturdier security on the final application
+     */
     @GetMapping("/validate/{username}/{token}")
     public String validate(@PathVariable("username") String username, @PathVariable("token") String token) {
         String serverToken = generatorService.getTOTPCode(secretKey);
