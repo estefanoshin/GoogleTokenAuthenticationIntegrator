@@ -24,7 +24,7 @@ public class Generator {
      * Generacion de la imagen QR para el pairing
      * QR image generation for pairing
      */
-    public static void createQRCode(String barCodeData, HttpServletResponse response, int height, int width)
+    public void createQRCode(String barCodeData, HttpServletResponse response, int height, int width)
             throws WriterException, IOException {
         BitMatrix matrix = new MultiFormatWriter().encode(barCodeData, BarcodeFormat.QR_CODE,
                 width, height);
@@ -38,7 +38,7 @@ public class Generator {
      * Se utiliza para generar el codigo de barras
      * Used to generate the barcode
      */
-    public static String getGoogleAuthenticatorBarCode(String secretKey, String account, String issuer) {
+    public String getGoogleAuthenticatorBarCode(String secretKey, String account, String issuer) {
         try {
             return "otpauth://totp/"
                     + URLEncoder.encode(issuer + ":" + account, "UTF-8").replace("+", "%20")
@@ -53,7 +53,7 @@ public class Generator {
      * Generacion de la semilla (secretKey)
      * secretKey Generator
      */
-    public static String generateSecretKey() {
+    public String generateSecretKey() {
         SecureRandom random = new SecureRandom();
         byte[] bytes = new byte[20];
         random.nextBytes(bytes);
@@ -65,7 +65,7 @@ public class Generator {
      * Generacion del token de o digitos en base a la secreKey
      * 6 digit token generator based on the secretKey
      */
-    public static String getTOTPCode(String secretKey) {
+    public String getTOTPCode(String secretKey) {
         Base32 base32 = new Base32();
         byte[] bytes = base32.decode(secretKey);
         String hexKey = Hex.encodeHexString(bytes);

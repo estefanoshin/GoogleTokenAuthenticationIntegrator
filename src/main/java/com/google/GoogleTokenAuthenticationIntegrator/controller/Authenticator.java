@@ -1,7 +1,9 @@
 package com.google.GoogleTokenAuthenticationIntegrator.controller;
 
 import com.google.GoogleTokenAuthenticationIntegrator.repository.Generator;
+import com.google.GoogleTokenAuthenticationIntegrator.service.impl.GeneratorService;
 import com.google.zxing.WriterException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +22,8 @@ public class Authenticator {
     private static String secretKey;
     private static final String MY_APP_NAME = "MY_CUSTOM_APP_NAME";
 
+    private GeneratorService generatorService;
+
     /**
      * Generacion de la semilla, la misma se deberia guardar para luego validar contra el token
      */
@@ -30,15 +34,20 @@ public class Authenticator {
          * Grabar esta llave en este momento o en una futura llamada en otro endpoint y asociarlo a un usuario
          * Save this key now or on another endpoint associated with the user
          */
-        secretKey = Generator.generateSecretKey();
+        secretKey = generatorService.generateSecretKey();
 
-        String code = Generator.getGoogleAuthenticatorBarCode(secretKey, username, MY_APP_NAME);
-        Generator.createQRCode(code, response, 400, 400);
+        String code = generatorService.getGoogleAuthenticatorBarCode(secretKey, username, MY_APP_NAME);
+        generatorService.createQRCode(code, response, 400, 400);
     }
 
     @GetMapping("/validate/{username}/{token}")
     public String validate(@PathVariable("username") String username, @PathVariable("token") String token) {
-        String serverToken = Generator.getTOTPCode(secretKey);
+        String serverToken = generatorService.getTOTPCode(secretKey);
         return String.valueOf(serverToken.equals(token));
+    }
+
+    @Autowired
+    public void setGeneratorService(GeneratorService generatorService) {
+        this.generatorService = generatorService;
     }
 }
